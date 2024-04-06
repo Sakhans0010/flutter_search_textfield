@@ -69,34 +69,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   // mocking a future
-  Future<List> fetchSimpleData() async {
+  Future<List<String>> fetchSimpleData() async {
     await Future.delayed(Duration(milliseconds: 2000));
-    List _list = <dynamic>[];
+    List<String> _list = [];
     // create a list from the text input of three items
     // to mock a list of items from an http call
     _list.add('Test' + ' Item 1');
     _list.add('Test' + ' Item 2');
     _list.add('Test' + ' Item 3');
-    return _list;
-  }
-
-  // mocking a future that returns List of Objects
-  Future<List> fetchComplexData() async {
-    await Future.delayed(Duration(milliseconds: 1000));
-    List _list = <dynamic>[];
-    List _jsonList = [
-      {'label': 'Text' + ' Item 1', 'value': 30},
-      {'label': 'Text' + ' Item 2', 'value': 31},
-      {'label': 'Text' + ' Item 3', 'value': 32},
-    ];
-    // create a list from the text input of three items
-    // to mock a list of items from an http call where
-    // the label is what is seen in the textfield and something like an
-    // ID is the selected value
-    _list.add(new TestItem.fromJson(_jsonList[0]));
-    _list.add(new TestItem.fromJson(_jsonList[1]));
-    _list.add(new TestItem.fromJson(_jsonList[2]));
-
     return _list;
   }
 
@@ -116,18 +96,18 @@ class _MyHomePageState extends State<MyHomePage> {
           child: ListView(
             children: <Widget>[
               SizedBox(height: 16),
-              TextFieldSearch(
-                  label: 'Simple Future List',
+              SearchTextField(
+                  hintText: 'Simple Future List',
                   controller: myController2,
-                  future: () {
+                  future: () async {
                     return fetchSimpleData();
                   }),
               SizedBox(height: 16),
-              TextFieldSearch(
-                label: 'Complex Future List',
+              SearchTextField(
+                hintText: 'Complex Future List',
                 controller: myController3,
-                future: () {
-                  return fetchComplexData();
+                future: () async {
+                  return fetchSimpleData();
                 },
                 getSelectedValue: (item) {
                   print(item);
@@ -137,23 +117,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 decoration: InputDecoration(hintText: 'Search For Something'),
               ),
               SizedBox(height: 16),
-              TextFieldSearch(
-                  label: 'Future List with custom scrollbar theme',
+              SearchTextField(
+                  hintText: 'Future List with custom scrollbar theme',
                   controller: myController4,
                   scrollbarDecoration: ScrollbarDecoration(
                       controller: ScrollController(),
                       theme: ScrollbarThemeData(
                           radius: Radius.circular(30.0),
                           thickness: MaterialStateProperty.all(20.0),
-                          isAlwaysShown: true,
+                          thumbVisibility: MaterialStateProperty.all(true),
                           trackColor: MaterialStateProperty.all(Colors.red))),
-                  future: () {
+                  future: () async {
                     return fetchSimpleData();
                   }),
               SizedBox(height: 16),
-              TextFieldSearch(
+              SearchTextField(
                   initialList: _testList,
-                  label: 'Simple List',
+                  hintText: 'Simple List',
                   controller: myController),
               SizedBox(height: 16),
               TextFormField(
